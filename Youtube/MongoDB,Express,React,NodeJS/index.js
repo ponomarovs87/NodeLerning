@@ -1,6 +1,9 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { registerValidation } from "./validations/auth.js";
+
+// https://youtu.be/GQ_pTmcXNrQ?t=2416
 
 mongoose
   .connect(
