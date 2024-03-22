@@ -1,9 +1,9 @@
 import { body } from "express-validator";
 
 export const registerValidation = [
-  body("email").isEmail(),
-  body("pasword").isLength({ min: 5 }),
-  body("fullName").isLength({ min: 3 }),
-  body("avatarUrl").optional().isURL(),
+  body("email","Неверный формат почты").isEmail(),
+  body("password","Слишком короткий пароль").isLength({ min: 5 }),
+  body("fullName","Слишом короткое имя").isLength({ min: 3 }),
+  body("avatarUrl","Неверная ссылка на аватарку").optional().isURL(),
 
 ];
