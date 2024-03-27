@@ -29,12 +29,12 @@ app.post("/auth/login", loginValidation, UserController.login);
 app.post("/auth/register", registerValidation, UserController.register);
 app.get("/auth/me", checkAuth, UserController.getMe);
 
-// app.get("/posts", PostController.getAll);
-// app.get("/posts/:id", PostController.getOnce);
+app.get("/posts", PostController.getAll);
+app.get("/posts/:id", PostController.getOnce);
 app.post("/posts", checkAuth, postCreateValidation, PostController.create);
-// app.delete("/posts", PostController.remove);
+app.delete("/posts/:id", checkAuth, PostController.remove);
 // app.path("/posts", PostController.update);
-// https://youtu.be/GQ_pTmcXNrQ?t=5688
+// https://youtu.be/GQ_pTmcXNrQ?t=6407
 
 app.listen(4444, (err) => {
   if (err) {

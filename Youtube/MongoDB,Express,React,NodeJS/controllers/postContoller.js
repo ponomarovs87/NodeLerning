@@ -1,4 +1,48 @@
 import PostModel from "../models/post.js";
+import { errFunc } from "../helpers/errFunc.js";
+
+export const getAll = async (req, res) => {
+  try {
+    const posts = await PostModel.find().populate("user").exec();
+    res.json(posts);
+  } catch (err) {
+    errFunc(res, err, "Не удалось получить статьи");
+  }
+};
+
+export const getOnce = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const doc = await PostModel.findByIdAndUpdate(
+      postId,
+      { $inc: { viewCount: 1 } },
+      { new: true }
+    );
+
+    if (!doc) {
+      return res.status(404).json({ message: "Статья не найдена" });
+    }
+
+    res.json(doc);
+  } catch (err) {
+    errFunc(res, err, "Не удалось получить статьи");
+  }
+};
+
+export const remove = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const removePost = await PostModel.findByIdAndDelete(postId);
+    if (!removePost) {
+      return res.status(404).json({ message: "Статья не найдена" });
+    }
+    res.json({
+      sucsess: true,
+    });
+  } catch (err) {
+    errFunc(res, err, "Не удалось получить статьи");
+  }
+};
 
 export const create = async (req, res) => {
   try {
@@ -13,7 +57,6 @@ export const create = async (req, res) => {
     const post = await doc.save();
     res.json(post);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Не удалось создать статью" });
+    errFunc(res, err, "Не удалось создать статью");
   }
 };
