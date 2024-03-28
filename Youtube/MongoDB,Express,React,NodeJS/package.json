@@ -1,6 +1,6 @@
 {
   "name": "progect_betta",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "progect with mongodb express react and nodejs texnologes",
   "main": "index.js",
   "type": "module",
