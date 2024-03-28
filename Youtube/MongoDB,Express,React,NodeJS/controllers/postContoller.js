@@ -60,3 +60,25 @@ export const create = async (req, res) => {
     errFunc(res, err, "Не удалось создать статью");
   }
 };
+export const update = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    const updatedPost = await PostModel.findByIdAndUpdate(
+      postId,
+      {
+        title: req.body.title,
+        text: req.body.text,
+        tags: req.body.tags,
+        imageUrl: req.body.imageUrl,
+        user: req.userId,
+        viewCount: 0,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({ sucsess: true });
+  } catch (err) {
+    errFunc(res, err, `что-то пошло не поплану /n ${err}`);
+  }
+};

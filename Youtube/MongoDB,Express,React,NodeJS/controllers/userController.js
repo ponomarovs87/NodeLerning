@@ -1,18 +1,12 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import { validationResult } from "express-validator";
+import { errFunc } from "../helpers/errFunc.js";
 
 import UserModel from "../models/user.js";
 
-
 export const register = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json(errors.array());
-    }
-
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
@@ -40,7 +34,7 @@ export const register = async (req, res) => {
 
     res.json({ ...userData, token });
   } catch (err) {
-    res.status(500).json({ messege: "не удалось зарагестрироваться" });
+    errFunc(res, err, "не удалось зарагестрироваться");
   }
 };
 export const login = async (req, res) => {
@@ -78,7 +72,7 @@ export const login = async (req, res) => {
 
     res.json({ ...userData, token });
   } catch (err) {
-    res.status(500).json({ message: "Что-то пошло не так" });
+    errFunc(res, err, "Что-то пошло не так");
   }
 };
 
@@ -93,7 +87,6 @@ export const getMe = async (req, res) => {
 
     res.json({ ...userData });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Что-то пошло не так" });
+    errFunc(res, err, "Что-то пошло не так");
   }
 };
