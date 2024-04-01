@@ -9,6 +9,7 @@ import { checkAuth } from "../utils/UtilitsMiddleware.js";
 const router = express.Router();
 
 router.get("/", PostController.getAll);
+router.get("/tags", PostController.getLastTags);
 router.get("/:id", PostController.getOnce);
 router.post(
   "/",

@@ -2,7 +2,12 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 
-import { userRoutes, uploadRoutes, postRoutes } from "./routes/routesHub.js";
+import {
+  userRoutes,
+  uploadRoutes,
+  postRoutes,
+  tagsRoutes,
+} from "./routes/routesHub.js";
 
 mongoose
   .connect(
@@ -14,11 +19,12 @@ mongoose
 const app = express();
 
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use("/auth", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/upload", uploadRoutes);
+app.use("/tags", tagsRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

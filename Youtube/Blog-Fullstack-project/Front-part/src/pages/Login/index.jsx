@@ -8,7 +8,7 @@ import styles from "./Login.module.scss";
 
 export const Login = () => {
   return (
-    <Paper classes={{ root: styles.root }}>
+    <Paper classes={{ root: styles.root }} elevation={0}>
       <Typography classes={{ root: styles.title }} variant="h5">
         Вход в аккаунт
       </Typography>

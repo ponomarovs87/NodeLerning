@@ -35,7 +35,7 @@ export const AddPost = () => {
   );
 
   return (
-    <Paper style={{ padding: 30 }}>
+    <Paper style={{ padding: 30 }} elevation={0}>
       <Button variant="outlined" size="large">
         Загрузить превью
       </Button>
