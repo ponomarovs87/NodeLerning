@@ -14,11 +14,11 @@ export const fetchTags = createAsyncThunk("posts/fetchTags", async () => {
 
 const initialState = {
   posts: {
-    items: [],
+    data: [],
     status: "loading",
   },
   tags: {
-    items: [],
+    data: [],
     status: "loading",
   },
 };

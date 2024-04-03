@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 
 import styles from "./Login.module.scss";
 import { useForm } from "react-hook-form";
-import { fetchAuth, selectIsAuth } from "../../Redux/slices/auth";
+import { fetchLogin, selectIsAuth } from "../../Redux/slices/auth";
 
 export const Login = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -27,15 +27,18 @@ export const Login = () => {
     mode: "all",
   });
 
-  console.log("isAuth", isAuth);
+  const onSubmit = async (values) => {
+    const data = await dispatch(fetchLogin(values));
+    if (data.payload?.token) {
+      window.localStorage.setItem("token", data.payload.token);
+    } else {
+      alert("error");
+    }
+  };
 
   if (isAuth) {
     return <Navigate to="/" />;
   }
-
-  const onSubmit = (values) => {
-    dispatch(fetchAuth(values));
-  };
 
   return (
     <Paper classes={{ root: styles.root }} elevation={0}>
@@ -57,6 +60,7 @@ export const Login = () => {
           error={Boolean(errors.password?.message)}
           helperText={errors.password?.message}
           {...register("password", { required: "Укажите пароль" })}
+          type="password"
           fullWidth
         />
         <Button type="submit" size="large" variant="contained" fullWidth>

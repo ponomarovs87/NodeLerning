@@ -3,7 +3,7 @@ const statusName = ["loading", "loaded", "error"];
 function targetState(state, targetStateItem, statusName, stateKey) {
   const targetState = stateKey ? state[stateKey] : state;
   if (targetState) {
-    targetState.items = targetStateItem;
+    targetState.data = targetStateItem;
     targetState.status = statusName;
   } else {
     console.error(`State with key '${stateKey}' does not exist.`);
