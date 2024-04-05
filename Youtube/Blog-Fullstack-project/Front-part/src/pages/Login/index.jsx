@@ -32,7 +32,7 @@ export const Login = () => {
     if (data.payload?.token) {
       window.localStorage.setItem("token", data.payload.token);
     } else {
-      alert("error");
+      console.log(data);
     }
   };
 

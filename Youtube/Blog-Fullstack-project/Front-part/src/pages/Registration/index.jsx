@@ -35,7 +35,7 @@ export const Registration = () => {
       window.localStorage.setItem("token", data.payload.token);
     } else {
       console.log(data); 
-      alert("error");
+      
     }
   };
 

@@ -17,7 +17,7 @@ export const getOnce = async (req, res) => {
       postId,
       { $inc: { viewCount: 1 } },
       { new: true }
-    );
+    ).populate('user');
 
     if (!doc) {
       return res.status(404).json({ message: "Статья не найдена" });

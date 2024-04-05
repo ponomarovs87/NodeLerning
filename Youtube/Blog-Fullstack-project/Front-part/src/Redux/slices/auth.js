@@ -4,9 +4,16 @@ import axios from "../../axios";
 
 export const fetchLogin = createAsyncThunk(
   "auth/fetchLogin",
-  async (params) => {
-    const { data } = await axios.post("/auth/login", params);
-    return data;
+
+  async (params, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post("/auth/login", params);
+
+      return data;
+    } catch (error) {
+      console.error("Ошибка при авторизации:", error);
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -16,16 +23,22 @@ export const fetchIsLogin = createAsyncThunk("auth/fetchLogin", async () => {
 });
 
 export const fetchRegistration = createAsyncThunk(
-  "auth/registration",
-  async (params) => {
-    const { data } = await axios.post("/auth/register", params);
-    return data;
+  "auth/fetchRegistration",
+  async (params, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post("/auth/register", params);
+      return data;
+    } catch (error) {
+      console.error("Ошибка при регистрации:", error);
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 const initialState = {
   data: null,
-  status: "loading",
+  status: "initial",
+  error: null,
 };
 
 const loginExtraReducers = extraReducersHelper(fetchLogin, null);
