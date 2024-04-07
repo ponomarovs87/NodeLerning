@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import * as Reaper from "./helpers/reaper.js";
+
 
 import {
   userRoutes,
@@ -36,3 +38,12 @@ app.listen(4444, (err) => {
   }
   console.log("server OK");
 });
+
+
+Reaper.addPostReaper();
+Reaper.addUserReaper()
+setInterval(() => {
+  Reaper.fileReaper();
+  Reaper.postReaper();
+}, 60 * 1000);
+

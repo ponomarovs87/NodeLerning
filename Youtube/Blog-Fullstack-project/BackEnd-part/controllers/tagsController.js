@@ -3,9 +3,12 @@ import { errFunc } from "../helpers/errFunc.js";
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().limit(5).exec();
+    const posts = await PostModel.find().exec();
 
-    const tags = posts.map((obj) => obj.tags).flat();
+    const tags = posts
+      .map((obj) => obj.tags)
+      .flat()
+      .reverse()
 
     res.json(tags);
   } catch (err) {
@@ -15,7 +18,7 @@ export const getAll = async (req, res) => {
 
 export const getLastTags = async (req, res) => {
   try {
-    const posts = await PostModel.find().limit(5).exec();
+    const posts = await PostModel.find().exec();
 
     const tags = posts
       .map((obj) => obj.tags)

@@ -1,6 +1,12 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -12,13 +18,19 @@ import { selectIsAuth } from "../../Redux/slices/auth";
 import axios from "../../axios";
 
 export const AddPost = () => {
+  const { id } = useParams();
+  const isEditing = Boolean(id);
   const isAuth = useSelector(selectIsAuth);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [text, setText] = useState("");
-  const [title, setTitle] = useState("");
-  const [tags, setTags] = useState("");
-  const [imageUrl, setImageUrl] = useState(null);
+
+  // Объединение состояний в один объект
+  const [formData, setFormData] = useState({
+    text: "",
+    title: "",
+    tags: "",
+    imageUrl: null,
+  });
   const inputImgRef = useRef(null);
 
   const handleChangeFile = async (e) => {
@@ -29,14 +41,14 @@ export const AddPost = () => {
       formData.append("image", image);
       const { data } = await axios.post("/upload", formData);
       console.log(data);
-      setImageUrl(data.url);
+      setFormData((prevState) => ({ ...prevState, imageUrl: data.url }));
     } catch (error) {
       console.error(error);
     }
   };
 
   const onClickRemoveImage = () => {
-    setImageUrl(null);
+    setFormData((prevState) => ({ ...prevState, imageUrl: null }));
   };
 
   const onSubmit = async () => {
@@ -44,26 +56,47 @@ export const AddPost = () => {
       setIsLoading(true);
 
       const fields = {
-        title,
-        imageUrl,
-        tags: tags.split(/[ ,#]+/).filter(Boolean),
-        text,
+        title: formData.title,
+        tags: formData.tags.split(/[ ,#]+/).filter(Boolean),
+        text: formData.text,
+        ...(formData.imageUrl && { imageUrl: formData.imageUrl }),
       };
 
-      const { data } = await axios.post("/posts", fields);
+      const { data } = isEditing
+        ? await axios.patch(`/posts/${id}`, fields)
+        : await axios.post("/posts", fields);
 
-      const id = data._id;
+      const _id = isEditing ? id : data._id;
 
-      console.log(id);
-
-      navigate(`/posts/${id}`);
+      navigate(`/posts/${_id}`);
     } catch (error) {
       console.error(error, `ошибка при создании статьи`);
     }
   };
 
   const onChange = useCallback((value) => {
-    setText(value);
+    setFormData((prevState) => ({ ...prevState, text: value }));
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`/posts/${id}`).then((res) => {
+        const postData = res.data;
+
+        const updatedData = Object.keys(postData)
+          .filter((key) => formData.hasOwnProperty(key))
+          .reduce((acc, key) => {
+            if (key === "tags") {
+              acc[key] = postData[key].join(", ");
+            } else {
+              acc[key] = postData[key];
+            }
+            return acc;
+          }, {});
+
+        setFormData((prevState) => ({ ...prevState, ...updatedData }));
+      });
+    }
   }, []);
 
   const options = useMemo(
@@ -94,7 +127,7 @@ export const AddPost = () => {
         Загрузить превью
       </Button>
       <input ref={inputImgRef} type="file" onChange={handleChangeFile} hidden />
-      {imageUrl && (
+      {formData.imageUrl && (
         <>
           <Button
             variant="contained"
@@ -104,7 +137,7 @@ export const AddPost = () => {
           </Button>
           <img
             className={styles.image}
-            src={`http://localhost:4444${imageUrl}`}
+            src={`http://localhost:4444${formData.imageUrl}`}
             alt="Uploaded"
           />
         </>
@@ -116,27 +149,31 @@ export const AddPost = () => {
         classes={{ root: styles.title }}
         variant="standard"
         placeholder="Заголовок статьи..."
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={formData.title}
+        onChange={(e) =>
+          setFormData((prevState) => ({ ...prevState, title: e.target.value }))
+        }
         fullWidth
       />
       <TextField
         classes={{ root: styles.tags }}
         variant="standard"
         placeholder="Тэги"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
+        value={formData.tags}
+        onChange={(e) =>
+          setFormData((prevState) => ({ ...prevState, tags: e.target.value }))
+        }
         fullWidth
       />
       <SimpleMDE
         className={styles.editor}
-        value={text}
+        value={formData.text}
         onChange={onChange}
         options={options}
       />
       <div className={styles.buttons}>
         <Button onClick={onSubmit} size="large" variant="contained">
-          Опубликовать
+          {isEditing ? `Сохранить` : `Опубликовать`}
         </Button>
         <a href="/">
           <Button size="large">Отмена</Button>
