@@ -4,7 +4,13 @@ import * as GuardianAngel from "../helpers/guardianAngel.js";
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate("user").exec();
+    const posts = await PostModel.find()
+      .populate("user")
+      .populate({
+        path: "comments",
+        populate: { path: "user" },
+      })
+      .exec();
     res.json(posts.reverse());
   } catch (err) {
     errFunc(res, err, "Не удалось получить статьи");
@@ -18,7 +24,13 @@ export const getOnce = async (req, res) => {
       postId,
       { $inc: { viewCount: 1 } },
       { new: true }
-    ).populate("user");
+    )
+
+      .populate({
+        path: "comments",
+        populate: { path: "user" },
+      })
+      .populate("user");
 
     if (!doc) {
       return res.status(404).json({ message: "Статья не найдена" });

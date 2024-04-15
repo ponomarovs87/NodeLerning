@@ -17,12 +17,25 @@ export const fetchRemovePost = createAsyncThunk(
   async (id) => await axios.delete(`/posts/${id}`)
 );
 
+export const fetchComments = createAsyncThunk(
+  "posts/fetchComments",
+  async () => {
+    const { data } = await axios.get("/comments/last5");
+    return data;
+  }
+);
+
 const initialState = {
   posts: {
     data: [],
     status: "loading",
+    selectedTag: null,
   },
   tags: {
+    data: [],
+    status: "loading",
+  },
+  comments: {
     data: [],
     status: "loading",
   },
@@ -30,14 +43,24 @@ const initialState = {
 
 const postsExtraReducers = extraReducersHelper(fetchPost, [], "posts");
 const tagsExtraReducers = extraReducersHelper(fetchTags, [], "tags");
+const commentsExtraReducers = extraReducersHelper(
+  fetchComments,
+  [],
+  "comments"
+);
 
 const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedTag: (state, action) => {
+      state.posts.selectedTag = action.payload;
+    },
+  },
   extraReducers: {
     ...postsExtraReducers,
     ...tagsExtraReducers,
+    ...commentsExtraReducers,
     [fetchRemovePost.pending]: (state, action) => {
       state.posts.data = state.posts.data.filter((obj) => {
         return obj._id !== action.meta.arg;
@@ -45,5 +68,7 @@ const postsSlice = createSlice({
     },
   },
 });
+
+export const { setSelectedTag } = postsSlice.actions;
 
 export const postReducer = postsSlice.reducer;

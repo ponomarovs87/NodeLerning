@@ -8,7 +8,7 @@ import {
   userRoutes,
   uploadRoutes,
   postRoutes,
-  tagsRoutes,
+  tagsRoutes,commentsRoutes
 } from "./routes/routesHub.js";
 
 mongoose
@@ -27,6 +27,7 @@ app.use("/auth", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/tags", tagsRoutes);
+app.use("/comments",commentsRoutes)
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

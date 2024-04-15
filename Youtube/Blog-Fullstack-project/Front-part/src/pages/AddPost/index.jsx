@@ -23,8 +23,6 @@ export const AddPost = () => {
   const isAuth = useSelector(selectIsAuth);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
-  // Объединение состояний в один объект
   const [formData, setFormData] = useState({
     text: "",
     title: "",

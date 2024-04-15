@@ -12,6 +12,7 @@ import styles from "./Post.module.scss";
 import { UserInfo } from "../UserInfo";
 import { PostSkeleton } from "./Skeleton";
 import { fetchRemovePost } from "../../Redux/slices/posts";
+import { setSelectedTag } from "../../Redux/slices/posts";
 
 export const Post = ({
   id,
@@ -70,7 +71,11 @@ export const Post = ({
           <ul className={styles.tags}>
             {tags.map((name) => (
               <li key={name}>
-                <Link to={`/tag/${name}`}>#{name}</Link>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => dispatch(setSelectedTag(name))}>
+                  #{name}
+                </div>
               </li>
             ))}
           </ul>

@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setSelectedTag } from "../Redux/slices/posts";
 
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -11,6 +13,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { SideBlock } from "./SideBlock";
 
 export const TagsBlock = ({ items, isLoading = true }) => {
+  const dispatch = useDispatch();
   return (
     <SideBlock title="Тэги">
       <List>
@@ -18,7 +21,7 @@ export const TagsBlock = ({ items, isLoading = true }) => {
           <a
             key={i}
             style={{ textDecoration: "none", color: "black" }}
-            href={`/tags/${name}`}>
+            onClick={() => dispatch(setSelectedTag(name))}>
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>

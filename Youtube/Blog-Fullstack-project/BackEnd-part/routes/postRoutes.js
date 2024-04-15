@@ -3,6 +3,7 @@ import * as PostController from "../controllers/postContoller.js";
 import {
   postCreateValidation,
   hendleValidationErrors,
+  postCommentCreateValidation,
 } from "../validations/ValidationMiddleware.js";
 import { checkAuth } from "../utils/UtilitsMiddleware.js";
 
