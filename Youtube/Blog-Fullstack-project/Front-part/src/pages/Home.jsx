@@ -36,13 +36,14 @@ const compareFnCreatedAt = (a, b) =>
 export const Home = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.data);
-  const { posts, tags } = useSelector((state) => state.allPosts);
+  const { posts, tags, comments } = useSelector((state) => state.allPosts);
   const [currentTab, setCurrentTab] = useState(0);
   const [sortedPosts, setSortedPosts] = useState(posts.data || null);
   const [isFiltred, setIsFiltred] = useState(false);
 
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
+  const isCommentsLoading = comments.status === "loading";
 
   useEffect(() => {
     dispatch(fetchPost());
@@ -133,23 +134,8 @@ export const Home = () => {
         <Grid item xs={4}>
           <TagsBlock items={tags.data} isLoading={isTagsLoading} />
           <CommentsBlock
-            isLoading={true}
-            items={[
-              {
-                user: {
-                  fullName: "Вася Пупкин",
-                  avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
-                },
-                text: "Это тестовый комментарий",
-              },
-              {
-                user: {
-                  fullName: "Иван Иванов",
-                  avatarUrl: "https://mui.com/static/images/avatar/2.jpg",
-                },
-                text: "When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top",
-              },
-            ]}
+            isLoading={isCommentsLoading}
+            items={comments.data}
           />
         </Grid>
       </Grid>

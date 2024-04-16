@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { SideBlock } from "./SideBlock";
 import ListItem from "@mui/material/ListItem";
@@ -29,10 +30,15 @@ export const CommentsBlock = ({ items, children, isLoading = true }) => {
                   <Skeleton variant="text" height={18} width={230} />
                 </div>
               ) : (
-                <ListItemText
-                  primary={obj.user.fullName}
-                  secondary={obj.text}
-                />
+                <Link
+                  to={`/posts/${obj.post}`}
+                  style={{ textDecoration: "none", color: "inherit" }}>
+                  <ListItemText
+                    primary={obj.user.fullName}
+                    secondary={obj.text}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Link>
               )}
             </ListItem>
             <Divider variant="inset" component="li" />

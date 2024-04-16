@@ -8,9 +8,11 @@ export const getAll = async (req, res) => {
     const tags = posts
       .map((obj) => obj.tags)
       .flat()
-      .reverse()
+      .reverse();
 
-    res.json(tags);
+    const uniqTags = [...new Set(tags)];
+
+    res.json(uniqTags);
   } catch (err) {
     errFunc(res, err, "не удалочь загрузить теги");
   }
@@ -23,10 +25,11 @@ export const getLastTags = async (req, res) => {
     const tags = posts
       .map((obj) => obj.tags)
       .flat()
-      .reverse()
-      .slice(0, 5);
+      .reverse();
 
-    res.json(tags);
+    const uniqTags = [...new Set(tags)].slice(0, 5);
+
+    res.json(uniqTags);
   } catch (err) {
     errFunc(res, err, "не удалочь загрузить теги");
   }
