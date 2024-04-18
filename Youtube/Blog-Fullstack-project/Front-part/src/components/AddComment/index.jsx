@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import styles from "./AddComment.module.scss";
 
@@ -11,11 +12,11 @@ import axios from "../../axios";
 
 export const AddComment = ({ setIsHaveChenges }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     text: "",
   });
   const [errorText, setErrorText] = useState(null);
+  const userData = useSelector((state) => state.auth.data);
 
   const onSubmit = async () => {
     try {
@@ -27,7 +28,7 @@ export const AddComment = ({ setIsHaveChenges }) => {
         setIsHaveChenges(true);
         setFormData({
           text: "",
-        })
+        });
       });
     } catch (error) {
       console.error(error, `ошибка при создании коментария`);
@@ -45,7 +46,7 @@ export const AddComment = ({ setIsHaveChenges }) => {
       <div className={styles.root}>
         <Avatar
           classes={{ root: styles.avatar }}
-          src="https://mui.com/static/images/avatar/5.jpg"
+          src={`http://localhost:4444${userData.imageUrl}`}
         />
         <div className={styles.form}>
           <TextField
