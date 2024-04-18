@@ -16,6 +16,14 @@ const UserShema = new mongoose.Schema(
       require: true,
     },
     avatarUrl: String,
+    reaper: {
+      type: String,
+      default:"userReaper"
+    },
+    expirationDate: {
+      type: Date,
+      default: () => Date.now() + 120 * 24 * 60 * 60 * 1000,
+    },
   },
   { timestamps: true }
 );

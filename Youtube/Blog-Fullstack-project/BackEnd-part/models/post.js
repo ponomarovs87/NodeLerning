@@ -4,11 +4,11 @@ const PostShema = new mongoose.Schema(
   {
     title: {
       type: String,
-      require: true,
+      required: true,
     },
     text: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
     },
     tags: {
@@ -22,9 +22,12 @@ const PostShema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      require: true,
+      required: true,
     },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     imageUrl: String,
+    reaper: String,
+    expirationDate: Date,
   },
   { timestamps: true }
 );
