@@ -8,6 +8,9 @@ class UserService {
         `Пользователь с почтовым адресом ${email} уже существует`,
       );
     }
+
+    // const hash
+    const user = await userModel.create({ email, password });
   }
 }
 
