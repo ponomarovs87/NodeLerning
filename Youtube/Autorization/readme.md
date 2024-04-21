@@ -71,6 +71,16 @@
     ```
     npm i jsonwebtoken bcrypt uuid
     ```
+  * **nodemailer** - библиотека для отправки электронной почты из приложений Node.js.
+
+    ```bash
+    npm i nodemailer
+    ```
+  * **express-validator** - библиотека для валидации и обработки данных запросов в приложениях Express.js.
+
+    ```bash
+    npm i express-validator
+    ```
 
 - добовляем dev зависимость
 
