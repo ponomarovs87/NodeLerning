@@ -47,6 +47,13 @@ class UserService {
     user.isActivated = true;
     await user.save();
   }
+  async login (email, password){
+    const user = await userModel.findOne({email})
+    if (!user) {
+      throw ApiError.BadRequest(`Пользователь с таким email не найден`)
+    }
+    
+  }
 }
 
 module.exports = new UserService();
