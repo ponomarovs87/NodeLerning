@@ -58,7 +58,7 @@ class UserService {
     if (!isPassEquals) {
       throw ApiError.BadRequest(`Неверный пароль`);
     }
-    
+
     const userDto = new UserDto(user);
     const tokens = tokenService.generateToken({ ...userDto });
 
@@ -68,6 +68,10 @@ class UserService {
       ...tokens,
       user: userDto,
     };
+  }
+  async logout(refreshToken) {
+    const token = await tokenService.removeToken(refreshToken);
+    return token;
   }
 }
 
