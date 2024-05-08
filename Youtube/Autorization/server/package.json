@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:debug":"node --inspect-brk index.js",
     "dev": "nodemon index.js"
   },
   "keywords": [],
