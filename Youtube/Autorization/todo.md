@@ -12,3 +12,4 @@
 
 - [Stop on 1:12:00](https://youtu.be/fN25fMQZ2v0?t=4362)
 - [Stop on 1:14:02](https://youtu.be/fN25fMQZ2v0?t=4486)
+- [Stop on 1:24:18](https://youtu.be/fN25fMQZ2v0?t=5058)
