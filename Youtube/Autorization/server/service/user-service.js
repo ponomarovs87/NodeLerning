@@ -75,12 +75,12 @@ class UserService {
   }
   async refresh(refreshToken) {
     if (!refreshToken) {
-      ApiError.UnauthorizedError();
+      throw ApiError.UnauthorizedError();
     }
     const userData = tokenService.validateRefreshToken(refreshToken);
     const tokenFromDB = await tokenService.fiendToken(refreshToken);
     if (!userData || !tokenFromDB) {
-      ApiError.UnauthorizedError();
+      throw ApiError.UnauthorizedError();
     }
     const user = await userModel.findById(userData.id);
     const userDto = new UserDto(user);

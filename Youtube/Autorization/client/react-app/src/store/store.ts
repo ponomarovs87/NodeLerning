@@ -8,6 +8,7 @@ import { API_URL } from "../http";
 export default class Store {
   user = {} as IUser;
   isAuth = false;
+  isLoading = false;
   constructor() {
     makeAutoObservable(this);
   }
@@ -17,10 +18,12 @@ export default class Store {
   setUser(user: IUser) {
     this.user = user;
   }
+  setLoading(bool: boolean) {
+    this.isLoading = bool;
+  }
   async login(email: string, password: string) {
     try {
       const response = await AuthService.login(email, password);
-      console.log(response);
       localStorage.setItem("token", response.data.accessToken);
       this.setAuth(true);
       this.setUser(response.data.user);
@@ -53,16 +56,17 @@ export default class Store {
     }
   }
   async checkAuth() {
+    this.setLoading(true);
     try {
       const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {
         withCredentials: true,
       });
-      console.log(response);
       localStorage.setItem("token", response.data.accessToken);
       this.setAuth(true);
       this.setUser(response.data.user);
     } catch (err) {
-      console.log(err.response?.data?.massage);
+    } finally {
+      this.setLoading(false);
     }
   }
 }
